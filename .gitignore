@@ -1,0 +1,17 @@
+# Python 编译生成的文件
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IPython 配置
+profile_default/
+ipython_config.py
+
+# pyenv 环境版本文件
+.python-version
+
+# 系统文件（macOS、Windows）
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
