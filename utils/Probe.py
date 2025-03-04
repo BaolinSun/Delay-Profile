@@ -18,7 +18,7 @@ class Probe:
         self.geometry = [Geometry() for _ in range(element_num)]
         self.geometry_vectors = np.zeros((element_num,3))
 
-        if probe_type == "linear array":
+        if (probe_type == "linear array") or (probe_type == "phase array"):
             self.create_linear_array()
             self.create_linear_array_vectors()
         else:

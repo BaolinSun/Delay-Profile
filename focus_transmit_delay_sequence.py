@@ -52,36 +52,49 @@ def numpy_to_c_array(matrix):
 
 if __name__ == '__main__':
 
-    probe = Probe(0.3e-3, 0.18e-03, 0.12e-3, 5e-3, 8, "linear array")
+    probe = Probe(0.3e-3, 0.18e-03, 0.12e-3, 5e-3, 32, "linear array")
     # probe = Probe(0.4e-3, 0.23e-03, 0.17e-3, 5e-3, 64, "linear array")
 
     delay = cal_focus_transmit_delay(probe, [0, 0, 50e-3], 1540)
 
     x_ele = probe.geometry_vectors[:, 0] * 1000
-    plt.plot(x_ele, delay)
-    plt.xlabel("x_ele [mm]")
-    plt.ylabel("delay [s]")
+    # plt.plot(x_ele, delay)
+    # plt.xlabel("x_ele [mm]")
+    # plt.ylabel("delay [s]")
     # plt.show()
 
-    nxmits = 15
+    nxmits = 16
     element_num = 64
 
     delay_profile = np.zeros((nxmits, 64), dtype=np.float32)
 
-    ele_index = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+    ele_index = np.array(range(32)) + 1
+
+    active_ele_index_array = []
     for i in range(nxmits):
-        active_ele_index = ele_index + i*4
+        active_ele_index = ele_index + i*2
         delay_profile[i][active_ele_index-1] = delay
+        # print(active_ele_index)
+        active_ele_index_array.append(active_ele_index)
+    
+    active_ele_index_array = np.array(active_ele_index_array)
+    print(active_ele_index_array)
 
     delay_profile = delay_profile / 0.01e-6
 
-    print(delay_profile)
-    # delay_profile = delay_profile.astype(int)
-    # delay_profile = delay_profile + 100
+    # print(delay_profile.shape)
+    # for i in range(delay_profile.shape[0]):
+    #     plt.plot(delay_profile[i, :])
+    # plt.show()
 
-    # delay_profile = numpy_to_c_array(delay_profile)
 
-    # with open("delay_profile.txt", "w", encoding="utf-8") as file:
-    #     file.write(delay_profile)
+    # print(delay_profile)
+    delay_profile = delay_profile.astype(int)
+    delay_profile = delay_profile + 100
+
+    delay_profile = numpy_to_c_array(delay_profile)
+
+    with open("delay_profile.txt", "w", encoding="utf-8") as file:
+        file.write(delay_profile)
         
 
